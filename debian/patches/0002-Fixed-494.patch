@@ -1,0 +1,29 @@
+From cf6fddf6bf40783e4ae4c7602d1e005f320b0dd3 Mon Sep 17 00:00:00 2001
+From: Takatoshi Kondo <redboltz@gmail.com>
+Date: Fri, 22 Jul 2016 16:00:50 +0900
+Subject: [PATCH 2/2] Fixed #494.
+
+Added false positive warinig suppression code for user_class.cpp.
+---
+ test/user_class.cpp | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/test/user_class.cpp b/test/user_class.cpp
+index f8ad20f..efe0eb4 100644
+--- a/test/user_class.cpp
++++ b/test/user_class.cpp
+@@ -382,7 +382,14 @@ TEST(MSGPACK_INHERIT, define_map_non_virtual)
+     msgpack::pack(sbuf, b);
+     msgpack::unpacked ret;
+     msgpack::unpack(ret, sbuf.data(), sbuf.size());
++#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)) && !defined(__clang__)
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
++#endif // (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)) && !defined(__clang__)
+     dm_bottom br = ret.get().as<dm_bottom>();
++#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)) && !defined(__clang__)
++#pragma GCC diagnostic pop
++#endif // (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)) && !defined(__clang__)
+     EXPECT_EQ(b.b, br.b);
+     EXPECT_EQ(b.m1, br.m1);
+     EXPECT_EQ(b.m2, br.m2);

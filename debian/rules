@@ -1,0 +1,27 @@
+#!/usr/bin/make -f
+
+export DEB_BUILD_MAINT_OPTIONS=hardening=+all,-pie
+include /usr/share/dpkg/buildflags.mk
+
+CXXFLAGS += -std=c++11
+export CFLAGS CXXFLAGS LDFLAGS
+
+%:
+	dh $@ --with=autotools_dev --parallel --buildsystem=autoconf
+
+override_dh_auto_build-indep:
+	make -C src doxygen
+
+override_dh_install-indep:
+	dh_install -i
+	dh_doxygen
+
+override_dh_auto_test-indep:
+
+override_dh_auto_test:
+	mkdir -p build-gtest
+	cd build-gtest && cmake -Wno-dev /usr/src/gtest && make
+	dh_auto_test --parallel --buildsystem=autoconf -- LDFLAGS="$(LDFLAGS) -L$(CURDIR)/build-gtest"
+
+override_dh_install:
+	dh_install --list-missing

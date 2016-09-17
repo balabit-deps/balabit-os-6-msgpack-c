@@ -1,0 +1,44 @@
+From 434bf90f8a28fd2efff7fd398a9b0d3598d4f671 Mon Sep 17 00:00:00 2001
+From: Takatoshi Kondo <redboltz@gmail.com>
+Date: Thu, 30 Jun 2016 21:59:12 +0900
+Subject: [PATCH 1/2] Fixed #494
+
+Added warning supression code.
+---
+ test/object_with_zone.cpp | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/test/object_with_zone.cpp b/test/object_with_zone.cpp
+index 9e3a80d..3bbb4b3 100644
+--- a/test/object_with_zone.cpp
++++ b/test/object_with_zone.cpp
+@@ -742,7 +742,14 @@ TEST(object_with_zone, user_defined_non_virtual)
+ 
+     msgpack::zone z;
+     msgpack::object obj(b, z);
++#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)) && !defined(__clang__)
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
++#endif // (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)) && !defined(__clang__)
+     bottom br = obj.as<bottom>();
++#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)) && !defined(__clang__)
++#pragma GCC diagnostic pop
++#endif // (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)) && !defined(__clang__)
+     EXPECT_EQ(b.b, br.b);
+     EXPECT_EQ(b.m1, br.m1);
+     EXPECT_EQ(b.m2, br.m2);
+@@ -780,7 +787,14 @@ TEST(object_with_zone, user_defined_virtual)
+ 
+     msgpack::zone z;
+     msgpack::object obj(b, z);
++#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)) && !defined(__clang__)
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
++#endif // (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)) && !defined(__clang__)
+     v_bottom br = obj.as<v_bottom>();
++#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)) && !defined(__clang__)
++#pragma GCC diagnostic pop
++#endif // (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)) && !defined(__clang__)
+     EXPECT_EQ(b.b, br.b);
+     EXPECT_EQ(b.m1, br.m1);
+     EXPECT_EQ(b.m2, br.m2);
