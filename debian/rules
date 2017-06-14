@@ -10,11 +10,10 @@ export CFLAGS CXXFLAGS LDFLAGS
 	dh $@ --with=autotools_dev --parallel --buildsystem=autoconf
 
 override_dh_auto_build-indep:
-	make -C src doxygen
+	make -C src
 
 override_dh_install-indep:
 	dh_install -i
-	dh_doxygen
 
 override_dh_auto_test-indep:
 

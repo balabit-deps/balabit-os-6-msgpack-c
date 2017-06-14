@@ -3,8 +3,6 @@ Section: libs
 Priority: extra
 Maintainer: Taku YASUI <tach@debian.org>
 Uploaders: James McCoy <jamessan@debian.org>
-Build-Depends-Indep: doxygen,
-                     doxygen-latex
 Build-Depends: autoconf,
                automake,
                autotools-dev,
@@ -32,21 +30,9 @@ Section: libdevel
 Architecture: any
 Depends: libmsgpackc2 (= ${binary:Version}),
          ${misc:Depends}
-Suggests: libmsgpack-doc
 Description: binary-based efficient object serialization library
  MessagePack is a binary-based efficient object serialization library.
  It enables to exchange structured objects between many languages like JSON.
  But unlike JSON, it is very fast and small.
  .
  This package contains the headers files needed for developing with msgpack-c.
-
-Package: libmsgpack-doc
-Section: doc
-Architecture: all
-Depends: ${misc:Depends}
-Description: binary-based efficient object serialization library (docs)
- MessagePack is a binary-based efficient object serialization library.
- It enables to exchange structured objects between many languages like JSON.
- But unlike JSON, it is very fast and small.
- .
- This package contains the documentation of msgpack-c's API.
