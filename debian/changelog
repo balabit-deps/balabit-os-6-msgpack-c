@@ -1,3 +1,9 @@
+msgpack-c (1.4.2-4bb1) xenial; urgency=medium
+
+  * Balabit patched version
+
+ -- Balabit Platform Team <devnull@dev.null>  Wed, 14 Jun 2017 13:21:56 +0200
+
 msgpack-c (1.4.2-4) unstable; urgency=medium
 
   * Apply another upstream patch to fix FTBFS on sparc64.
